@@ -79,8 +79,11 @@ services:
       - ANONYMIZED_TELEMETRY=FALSE
     restart: unless-stopped
 
-  searxng:
+    searxng:
     image: docker.io/searxng/searxng:2026.5.31-7159b8aed
+    dns:
+      - 192.168.50.26
+      - 1.1.1.1
     entrypoint:
       - /bin/sh
       - -c
@@ -117,17 +120,6 @@ services:
       timeout: 6s
       retries: 20
       start_period: 10s
-    restart: unless-stopped
-
-  ntfy:
-    image: docker.io/binwiederhier/ntfy
-    command: serve
-    ports:
-      - "${NTFY_BIND:-127.0.0.1}:8091:80"
-    volumes:
-      - ntfy-cache:/var/cache/ntfy
-    environment:
-      - NTFY_BASE_URL=${NTFY_BASE_URL:-http://localhost:8091}
     restart: unless-stopped
 
 volumes:
